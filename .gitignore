@@ -1,0 +1,25 @@
+# Virtual Environment
+venv/
+
+# Dataset
+dataset.csv
+asl_alphabet_train/
+asl_alphabet_test/
+
+# Trained Models
+model.pkl
+encoder.pkl
+scaler.pkl
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Images/Generated Outputs
+*.png
+
+# VS Code settings
+.vscode/

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SignSense — Live Detection</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <header class="header">
+    <div class="logo">
+      <div class="logo__icon">&#x270B;</div>
+      <span class="logo__text">Sign<strong>Sense</strong></span>
+    </div>
+    <div class="header__status">
+      <span class="status-dot" id="status-dot"></span>
+      <span class="status-text" id="status-text">Connecting...</span>
+    </div>
+  </header>
+
+  <main class="app">
+
+    <!-- LEFT: Camera -->
+    <div class="camera-panel">
+      <div class="camera-frame" id="camera-frame">
+        <video id="video" autoplay playsinline muted></video>
+        <canvas id="overlay-canvas"></canvas>
+        <div class="camera-idle" id="camera-idle">
+          <div class="camera-idle__icon">&#128247;</div>
+          <p>Camera is off</p>
+        </div>
+        <div class="cam-badge" id="cam-badge" hidden>
+          <span id="lm-status">Searching for hand</span>
+        </div>
+      </div>
+
+      <div class="camera-controls">
+        <button class="btn btn--primary" id="btn-start">&#9654; Start</button>
+        <button class="btn btn--danger"  id="btn-stop"    disabled>&#9632; Stop</button>
+        <button class="btn btn--outline" id="btn-capture" disabled>&#128248; Capture</button>
+      </div>
+
+      <label class="toggle-label">
+        <input type="checkbox" id="auto-mode" />
+        <span class="toggle-track"></span>
+        Auto-predict every second
+      </label>
+
+      <div class="accuracy-card">
+        <div class="accuracy-card__header">
+          <span>Model Confidence</span>
+          <span class="accuracy-val" id="accuracy-val">&#8212;</span>
+        </div>
+        <div class="accuracy-bar-track">
+          <div class="accuracy-bar-fill" id="accuracy-bar" style="width:0%"></div>
+        </div>
+        <div class="accuracy-card__sub" id="accuracy-sub">Awaiting first prediction</div>
+      </div>
+
+      <div class="top3-card">
+        <div class="top3-card__label">Top 3 Predictions</div>
+        <div id="top3-box">
+          <p class="top3-empty">No predictions yet</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Prediction + Sentence -->
+    <div class="results-panel">
+
+      <div class="pred-card">
+        <div class="pred-card__label">Current Prediction</div>
+        <div class="pred-main">
+          <div class="pred-letter" id="pred-letter">?</div>
+          <div class="pred-meta">
+            <div class="conf-ring-wrap">
+              <svg class="conf-ring" viewBox="0 0 60 60">
+                <circle cx="30" cy="30" r="24" fill="none" stroke="var(--border)" stroke-width="5"/>
+                <circle cx="30" cy="30" r="24" fill="none" stroke="var(--accent)" stroke-width="5"
+                  stroke-dasharray="150.8" stroke-dashoffset="150.8"
+                  stroke-linecap="round" id="conf-arc"
+                  transform="rotate(-90 30 30)"/>
+              </svg>
+              <span class="conf-pct" id="conf-pct">0%</span>
+            </div>
+            <span class="conf-label">confidence</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sentence-card">
+        <div class="sentence-card__header">
+          <span>Sentence Builder</span>
+          <div class="sentence-actions">
+            <button class="btn btn--ghost btn--sm" id="btn-space">&#9251; Space</button>
+            <button class="btn btn--ghost btn--sm" id="btn-delete">&#9003; Delete</button>
+            <button class="btn btn--ghost btn--sm" id="btn-clear">&#10005; Clear</button>
+          </div>
+        </div>
+        <div class="sentence-display" id="sentence-display">
+          <span class="sentence-placeholder">Start signing to build a sentence</span>
+        </div>
+        <div class="sentence-tape" id="sentence-tape"></div>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-chip">
+          <span class="stat-chip__val" id="stat-total">0</span>
+          <span class="stat-chip__label">Predictions</span>
+        </div>
+        <div class="stat-chip">
+          <span class="stat-chip__val" id="stat-high">&#8212;</span>
+          <span class="stat-chip__label">Best Letter</span>
+        </div>
+        <div class="stat-chip">
+          <span class="stat-chip__val" id="stat-avg">&#8212;</span>
+          <span class="stat-chip__label">Avg Confidence</span>
+        </div>
+      </div>
+
+      <div class="api-banner" id="api-banner" style="display:none">
+        <span>&#9881;</span>
+        <span>
+          <strong>Backend not connected.</strong>
+          Make sure Flask is running on <code>http://localhost:5000</code>
+        </span>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="js/detector.js"></script>
+  <script src="js/ui.js"></script>
+</body>
+</html>
